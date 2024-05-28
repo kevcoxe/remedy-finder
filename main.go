@@ -67,9 +67,39 @@ func main() {
 		return c.JSON(http.StatusOK, r)
 	})
 
-	e.GET("/hello/:name", func(c echo.Context) error {
-		name := c.Param("name")
-		return c.String(http.StatusOK, fmt.Sprintf("Hello %v!", name))
+	e.GET("/api/v1/symptoms", func(c echo.Context) error {
+		r := client.GetSymptoms()
+
+		fmt.Printf("Symptoms: %v\n", r)
+
+		return c.JSON(http.StatusOK, r)
+	})
+
+	e.GET("/api/v1/symptoms/:id", func(c echo.Context) error {
+		id := c.Param("id")
+
+		r, err := client.GetSymptomById(id)
+		if err != nil {
+			return c.JSON(http.StatusNotFound, nil)
+		}
+
+		return c.JSON(http.StatusOK, r)
+	})
+
+	e.PUT("/api/v1/symptoms", func(c echo.Context) error {
+		// Get name and description
+		name := c.FormValue("name")
+		description := c.FormValue("description")
+
+		r, err := client.CreateSymptom(name, description)
+		if err != nil {
+			fmt.Printf("error creating symptom: %v\n", err)
+			return c.JSON(http.StatusNotFound, nil)
+		}
+
+		fmt.Printf("Symptoms: %v\n", r)
+
+		return c.JSON(http.StatusOK, r)
 	})
 
 	e.Logger.Fatal(e.Start(":1323"))

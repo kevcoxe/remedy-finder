@@ -233,6 +233,12 @@ func (sc *SqliteClient) InitiateTable() {
 	(1, 'Vitamin B', 'A vitamin'),
 	(2, 'Vitamin C', 'A vitamin');
 
+	INSERT or IGNORE INTO symptoms (Id, Name, Description)
+	VALUES
+	(0, 'Ear Pain', 'pain in ears'),
+	(1, 'Swollen glands', 'Swollen glands in neck or other areas'),
+	(2, 'Sickness', 'General sickness');
+
 	`)
 	if err != nil {
 		panic(err.Error())
